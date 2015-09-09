@@ -1,0 +1,4 @@
+postgresql_repmgr_node: 1
+postgresql_repmgr_node_name: node01
+postgresql_repmgr_type: master
+postgresql_repmgr_conninfo: "host=10.0.0.100 user={{ postgresql_repmgr_user }} password={{ postgresql_repmgr_password }} dbname={{ postgresql_repmgr_database }}"

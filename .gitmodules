@@ -1,0 +1,6 @@
+[submodule "roles/jacoelho.postgresql"]
+	path = roles/jacoelho.postgresql
+	url = git@github.com:jacoelho/jacoelho.postgresql.git
+[submodule "roles/info.haproxy"]
+	path = roles/info.haproxy
+	url = https://github.com/FloeDesignTechnologies/ansible-haproxy.git

@@ -1,0 +1,33 @@
+---
+
+haproxy_defaults:
+  stats:
+    enabled: true
+    uri: /
+    realm: "Haproxy Statistics"
+  timeout:
+    - param: 'connect'
+      value: '5000ms'
+    - param: 'client'
+      value: '50000ms'
+    - param: 'server'
+      value: '50000ms'
+
+haproxy_listen:
+  - bind:
+      - ":5432"
+    name: POSTGRES
+    balance: first
+    mode: tcp
+    options:
+      - "pgsql-check user haproxy"
+    servers:
+      - name: master
+        ip: 10.0.0.100
+        port: 5432
+        maxconn: 1024
+      - name: slave
+        ip: 10.0.0.10
+        port: 5432
+        maxconn: 1024
+

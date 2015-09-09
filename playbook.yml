@@ -1,0 +1,39 @@
+---
+
+- name: setup haproxy
+  hosts: haproxy
+  tags: haproxy
+
+  roles:
+    - { role: info.haproxy, sudo: yes }
+
+
+- name: setup master postgresql
+  hosts: master
+
+  roles:
+    - { role: jacoelho.postgresql, sudo: yes }
+
+- name: setup master postgresql
+  hosts: slaves
+
+  roles:
+    - { role: jacoelho.postgresql, sudo: yes }
+
+- name: check replication (master)
+  hosts: master
+  tags: check
+
+  tasks:
+  - command: psql -U postgres -c "SELECT pg_current_xlog_location()"
+
+  - command: psql -U postgres -c "select * from pg_stat_replication"
+
+- name: check replication (slave)
+  hosts: slaves
+  tags:
+    - check
+    - check2
+
+  tasks:
+  - command: psql -U postgres -c "select now() - pg_last_xact_replay_timestamp() AS replication_delay"

@@ -1,0 +1,64 @@
+---
+
+repmgr_conf: /etc/repmgr/repmgr.conf
+repmgr_cluster: cluster
+postgresql_repmgr: true
+postgresql_repmgr_master_ip: 10.0.0.100
+
+postgresql_repository: official
+
+#postgresql_replication: true
+
+postgresql_cfg_listen_addresses: "*"
+
+postgresql_cfg_hot_standby: "on"
+postgresql_cfg_wal_level: hot_standby
+
+postgresql_cfg_wal_buffers: 16MB
+
+# 9.4
+postgresql_cfg_max_replication_slots: 10
+
+# 9.3
+#postgresql_cfg_wal_keep_segments: 1000
+
+postgresql_cfg_max_wal_senders: 10
+postgresql_cfg_checkpoint_segments: 32
+
+postgresql_cfg_archive_mode: "on"
+postgresql_cfg_archive_command: "cd ."
+
+postgresql_users:
+  - user: repmgr
+    connections:
+      - database: all
+        type: host
+        address: 10.0.0.0/24
+        auth: md5
+      - database: replication
+        type: host
+        address: 10.0.0.0/24
+        auth: md5
+      - database: replication
+        type: host
+        address: 10.0.2.0/24
+        auth: md5
+  - user: postgres
+    connections:
+      - database: all
+        type: host
+        address: 10.0.0.0/24
+        auth: md5
+  - user: haproxy
+    role_attr_flags: LOGIN
+    connections:
+      - database: all
+        type: host
+        address: 10.0.0.0/24
+        auth: md5
+
+postgresql_databases:
+  - database: database01
+    owner: "postgres"
+  - database: database02
+    owner: "postgres"
